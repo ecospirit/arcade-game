@@ -19,6 +19,10 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     
     this.x = this.x + 50 * dt;
+    
+    if (this.x > 505) // how do/should I reference Engine.canvas.width?
+        this.x = 0;
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -44,44 +48,56 @@ Player.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    
+// why doesn't this work? Just trying to get it to move at all, like the enemies
     //this.x = this.x - 50 * dt;
     
-};
-Player.prototype.handleInput = function() {
-
-/*
-    if up, y = y - 23;
-    if down, y = y - 83;
-    if right, x = x + 101;
-    if left, x = x - 101;
-    */
-
+    
+    if (this.y < 0) {
+        //if gets to top, go back to bottom and start again
+        this.x = 202;
+        this.y = 415;
+    }
+    
 };
 
-/*
-Player.prototype.reset = function() {
-    this.x = 202;
-    this.y = 415;
-    this.render();
-};    
-*/
+Player.prototype.handleInput = function(inKey) {
+
+    switch (inKey) {
+        case 'left':   
+            this.x = this.x - 101;
+            break;
+        case 'up': 
+            this.y = this.y - 23;
+            break;
+        case 'right': 
+            this.x = this.x + 101;
+            break;
+        case 'down': 
+            this.y = this.y - 83;
+            break;
+       default:
+        break; //invalid key
+    }
+};
+
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
 
-var enemy1 = new Enemy(100, 100);
-
-var allEnemies = [enemy1];
-
+var enemy1 = new Enemy(100, 70);
+var enemy2 = new Enemy(400,125);
+var enemy3 = new Enemy(250, 220);
+var allEnemies = [enemy1, enemy2, enemy3];
 /*
-var numEnemies = 6;
 for (var i=0;i++;i<numEnemies) {
         allEnemies[i] = new Enemy();
         //need new coordinates for each Enemy
     };
-*/    
+ */   
 var player = new Player(202, 415);
 
 // This listens for key presses and sends the keys to your
@@ -98,12 +114,21 @@ document.addEventListener('keyup', function(e) {
 });
 
 /*
-function checkCollisions( ... ) {    
+function checkCollisions(allEnemies,i,player, cols) {    
         if ((player.x == allEnemies[i].x) and (player.y == allEnemies[i].y)) {
-            player.reset();
-            player.tries++;
-            if (player.tries > 10)
-                endGame();
+              player.x = 202;
+              player.y = 415;      
+           
         }        
 };    
+*/
+
+/*
+function checkEnd(cols) {
+
+    player.cols++;
+    if (player.cols > 100)
+        endGame();
+    }    
+      
 */
