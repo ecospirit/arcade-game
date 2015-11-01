@@ -8,3 +8,5 @@ The player will go back to the starting place
 whenever there is a collision or
 when the player attempts to go outside the borders or
 when the player successfully makes it to the water.
+If the player crosses to the water 100 times, she wins and the game is over.
+If the player squashes 100 bugs, she loses and the game is over.
