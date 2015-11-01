@@ -11,9 +11,9 @@ var PLAYER_Y = 415;
 
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
-    // Variables applied to each of our instances
-    // The image/sprite uses a helper to easily load images
-    
+// Variables applied to each of our instances
+// The image/sprite uses a helper to easily load images
+
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
@@ -26,10 +26,10 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    
+
     this.x = this.x + this.speed * dt;
-    
-    if (this.x > C_WIDTH) // When gets to rightmost end of canvas, start over at left side
+    // When gets to rightmost end of canvas, start over at left side
+    if (this.x > C_WIDTH)
         this.x = 0;
 };
 
@@ -56,75 +56,70 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.update = function(dt) {
-        
+
     //if get to water, restart at bottom
     if (this.y < 0) {
-    
         this.wins++;
         this.reset();
-    } 
-    
+    }
+
     //compare player location to each enemy
-    
+
     //Question: Should this be done in Player.update or Enemy.update? or a separate function altogether
-        
-    for (var i=0;i<allEnemies.length;i++) {     
-        
+
+    for (var i=0;i<allEnemies.length;i++) {
         if (this.collisionCheck(this.x, this.y, allEnemies[i].x, allEnemies[i].y)) {
             //if collide with enemy, restart at bottom
-            
             this.cols++;
-            this.reset();       
+            this.reset();
         }
-    }  
+    }
 };
 
 Player.prototype.handleInput = function(inKey) {
 //Canvas boundaries a little fuzzy..?
-     
     switch (inKey) {
-        case 'left':   
+        case 'left':
             if (this.x - 50 < 0) this.reset()
                 else this.x = this.x - 50;
             break;
-        case 'up': 
+        case 'up':
             this.y = this.y - 50;
             break;
-        case 'right': 
+        case 'right':
             if ((this.x + 50) > 404) this.reset()
                 else this.x = this.x + 50;
             break;
-        case 'down': 
+        case 'down':
             if ((this.y + 50) > 332) this.reset()
-                else this.y = this.y + 50;    
+                else this.y = this.y + 50;
             break;
-        default:   
-        break; 
+        default:
+        break;
     }
 };
 
 Player.prototype.reset = function() {
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
- }; 
- 
- Player.prototype.collisionCheck = function(px, py, ex, ey) {
+ };
+
+Player.prototype.collisionCheck = function(px, py, ex, ey) {
  //check the distance between the midpoints of each sprite image
- //if distance < (width|height?), then they overlap 
+ //if distance < (width|height?), then they overlap
  //Midpoints - got these from actual image sizes, and trial and error
- 
+
     var x1 = px + 50;
     var x2 = ex + 50;
     var y1 = py + 40;
     var y2 = ey + 40;
     var distance = Math.sqrt(((x2 - x1)*(x2 - x1)) + ((y2 - y1)*(y2 - y1)));
-       
-    if (distance < 90) 
+
+    if (distance < 90)
         return true;
-     return false   
-  
- };
-  
+     return false;
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -135,7 +130,7 @@ var enemy3 = new Enemy(250,220,SPEED_3);
 var enemy4 = new Enemy(250,70,SPEED_4);
 
 var allEnemies = [enemy1, enemy2, enemy3, enemy4];
- 
+
 var player = new Player(PLAYER_X, PLAYER_Y,0, 0); //player starts with 0 wins and 0 collisions
 
 // This listens for key presses and sends the keys to your
@@ -152,7 +147,7 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-Player.prototype.checkEnd = function(cols,wins) {
+Player.prototype.gameEnd = function(cols,wins) {
 
 //Extra: end game if player has 100 collisions or 100 wins
 //How do you stop the game? Display a static image?
@@ -163,12 +158,10 @@ Player.prototype.checkEnd = function(cols,wins) {
         reset();
     if (this.wins > 100)
         reset();
-*/        
-};  
+*/
+};
 
-//Extra: display image if collision occurs?        
-             
+//Extra: display image if collision occurs?
+
 //if (collision)
 //  ctx.drawImage(Resources.get('images/crash.png'), this.x, this.y);
-     
-  
