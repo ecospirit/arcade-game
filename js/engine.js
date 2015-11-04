@@ -57,7 +57,7 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         win.requestAnimationFrame(main);
-    }
+    };
 
     /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
@@ -67,7 +67,7 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         main();
-    }
+    };
 
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
@@ -81,7 +81,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
     
-    }
+    };
     /* This is called by the update function  and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
@@ -95,7 +95,7 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
-    }
+    };
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -136,7 +136,9 @@ var Engine = (function(global) {
             }
         }
         renderEntities();
-    }
+        showScores();
+        if (gameEnd()) reset();
+    };
 
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
@@ -150,16 +152,39 @@ var Engine = (function(global) {
             enemy.render();
         });
         player.render();
-    }
+    };
+    //Added this function to display player running scores for wins and collisions
+    function showScores() {
+        window.scoreLine = "";
+        ctx.font = "14px impact";
+        ctx.textAlign = "left";
+        ctx.fillStyle = "black";
+        window.scoreLine = ("Wins: " + player.wins + " Hits: " + player.cols);
+        ctx.fillText(window.scoreLine, 10, 500);
+    };
+    //end game if player has 10 collisions or 10 wins
+    function gameEnd() {
+        if (player.cols > 10) {
+            return true;
+            };
+        if (player.wins > 10) {
+            return true;
+            };
+        return false;
+    };
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
+    // This function doesn't do anything until the game is over. It is called once by the init() method.
     function reset() {
-        //noop
-    }
-
+        if (gameEnd()) {
+            window.text = "GAME OVER";
+            ctx.fillStyle="white";
+            ctx.fillRect(0,0,505,606);
+            ctx.font = "48px impact";
+            ctx.textAlign = "center";
+            ctx.fillStyle= "black";
+            ctx.fillText(window.text, 250,300);
+        };
+    };    
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
@@ -179,5 +204,5 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
-    
+
 })(this);

@@ -7,7 +7,9 @@ var SPEED_4 = 65;
 var C_WIDTH = 505;
 var C_HEIGHT = 606;
 var PLAYER_X = 202;
-var PLAYER_Y = 415;
+var PLAYER_Y = 410;
+var B_WIDTH = 101;
+var B_HEIGHT = 83;
 
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
@@ -58,7 +60,7 @@ Player.prototype.render = function() {
 Player.prototype.update = function(dt) {
 
     //if get to water, restart at bottom
-    if (this.y < 0) {
+    if (this.y < -5) {
         this.wins++;
         this.reset();
     }
@@ -77,22 +79,22 @@ Player.prototype.update = function(dt) {
 };
 
 Player.prototype.handleInput = function(inKey) {
-//Canvas boundaries a little fuzzy..?
+
     switch (inKey) {
         case 'left':
-            if (this.x - 50 < 0) this.reset()
-                else this.x = this.x - 50;
+            if (this.x - B_WIDTH < 0) this.reset();
+                else this.x = this.x - B_WIDTH;
             break;
         case 'up':
-            this.y = this.y - 50;
+            this.y = this.y - B_HEIGHT;
             break;
         case 'right':
-            if ((this.x + 50) > 404) this.reset()
-                else this.x = this.x + 50;
+            if ((this.x + B_WIDTH) > 404) this.reset();
+                else this.x = this.x + B_WIDTH;
             break;
         case 'down':
-            if ((this.y + 50) > 332) this.reset()
-                else this.y = this.y + 50;
+            if ((this.y + B_HEIGHT) > 332) this.reset();
+                else this.y = this.y + B_HEIGHT;
             break;
         default:
         break;
@@ -102,20 +104,20 @@ Player.prototype.handleInput = function(inKey) {
 Player.prototype.reset = function() {
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
- };
+};
 
 Player.prototype.collisionCheck = function(px, py, ex, ey) {
  //check the distance between the midpoints of each sprite image
  //if distance < (width|height?), then they overlap
  //Midpoints - got these from actual image sizes, and trial and error
 
-    var x1 = px + 50;
-    var x2 = ex + 50;
-    var y1 = py + 40;
-    var y2 = ey + 40;
+    var x1 = px + 40;
+    var x2 = ex + 40;
+    var y1 = py + 30;
+    var y2 = ey + 30;
     var distance = Math.sqrt(((x2 - x1)*(x2 - x1)) + ((y2 - y1)*(y2 - y1)));
 
-    if (distance < 90)
+    if (distance < 65)
         return true;
      return false;
 };
@@ -124,10 +126,10 @@ Player.prototype.collisionCheck = function(px, py, ex, ey) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var enemy1 = new Enemy(100,70,SPEED_1);
-var enemy2 = new Enemy(400,125,SPEED_2);
-var enemy3 = new Enemy(250,220,SPEED_3);
-var enemy4 = new Enemy(250,70,SPEED_4);
+var enemy1 = new Enemy(100,65,SPEED_1);
+var enemy2 = new Enemy(400,145,SPEED_2);
+var enemy3 = new Enemy(250,230,SPEED_3);
+var enemy4 = new Enemy(250,65,SPEED_4);
 
 var allEnemies = [enemy1, enemy2, enemy3, enemy4];
 
@@ -147,21 +149,6 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-Player.prototype.gameEnd = function(cols,wins) {
 
-//Extra: end game if player has 100 collisions or 100 wins
-//How do you stop the game? Display a static image?
-//Extra: show score? then show You Win or You Lose or Game Over?
 
-/*
-    if (this.cols > 100)
-        reset();
-    if (this.wins > 100)
-        reset();
-*/
-};
 
-//Extra: display image if collision occurs?
-
-//if (collision)
-//  ctx.drawImage(Resources.get('images/crash.png'), this.x, this.y);
